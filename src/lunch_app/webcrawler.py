@@ -25,17 +25,14 @@ def get_dania_dnia_from_pod_koziolek():
     webpage = request.urlopen(url)
     magic_soup = BeautifulSoup(read_webpage(webpage))
     list_of_meals = []
-    menu = magic_soup.find_all(
-        "span",
-        {
-            "style": "color: #ffffff; font-family: 'Segoe Print',"
-                     " sans-serif; font-size: medium; line-height: 1.3em;"
-        },
+    menu = magic_soup.select(
+        ".custom table p",
     )
     for meal in menu:
         item = "{}".format(meal.text)
         item = item.strip("\xa0")
         cleaner = (
+            'gotujemy' not in item.lower() and
             item != "<br/>" and
             item and
             item != "\xa0" and

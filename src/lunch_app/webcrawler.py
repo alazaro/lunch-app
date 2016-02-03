@@ -95,15 +95,14 @@ def get_week_from_tomas_crawler():
                 .replace('</span>', "").strip("\xa0").strip()
             if item != "<br/>" and item and item != "\xa0" \
                     and item != ":):)":
-                alist.append(item)
-    while "kcal" in str(alist) or "..." in str(alist) and alist[0]:
-        meal = alist[0]
-        alist.pop(0)
-        while ("kcal" and '...') not in alist[0] and alist[0] != 'ZUPA DNIA:':
-            meal += alist[0]
-            meal += " "
-            alist.pop(0)
-            tomas_menu['diet'].append(meal.strip('...').strip())
+                alist.append(str(item))
+    while "kcal" in str(alist) or "..." in str(alist):
+        meal = ' '.join((alist.pop(0), alist.pop(0)))
+        tomas_menu['diet'].append(meal.strip('...').strip())
+
+    offer = magic_soup.select('b.style4')
+    if offer:
+        tomas_menu['diet'].append(offer[-1].text)
 
     for i in range(1, 6):
         day_manu = {
